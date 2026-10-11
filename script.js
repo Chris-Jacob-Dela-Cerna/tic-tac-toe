@@ -1,30 +1,44 @@
 
 
+const gameboard = (
+  () => {
 
-function game() {
-  const gameboard = (
-    function() {
-      const board = [
-        null, null, null, 
-        null, null, null, 
-        null, null, null
-      ];
+    const grid = [
+      null, null, null, 
+      null, null, null, 
+      null, null, null
+    ];
 
-      return {
-        getBoard: () => board,
-        mark: ( index, symbol ) => { 
-          if (board[index] === null) board[index] = symbol;
-          console.log(board);
+    const winningLines = [
+      [ 0, 1, 2 ], [ 3, 4, 5 ], [ 6, 7, 8 ],
+      [ 0, 3, 6 ], [ 1, 4, 7 ], [ 2, 5, 8 ],
+      [ 0, 4, 8 ], [ 2, 4, 6 ]
+    ];
+
+    return {
+      checkLines: ( symbol ) => {
+        for (let idx = 0; idx < grid.length; idx++) {
+          const line = winningLines[idx];
+          if ( grid[line[0]] === symbol
+            && grid[line[1]] === symbol
+            && grid[line[2]] === symbol
+          ) return true;
+          else {
+            return false;
+          }
+        }
+      },
+      grid: () => grid,
+      isFull: () => grid.includes(null),
+      mark: ( idx, symbol ) => { 
+        if ( grid[idx] === null ) {
+          grid[idx] = symbol;
+          return true;
+        } else {
+          return false;
         }
       }
     }
-  )();
 
-  function player( symbol ) {
-    return {
-      mark: index => gameboard.mark( index, symbol )
-    }
   }
-}
-
-game()
+)();
