@@ -8,12 +8,14 @@ const gameBoard = (
       null, null, null
     ];
     const winningLines = [
-      [ 0, 1, 2 ], [ 3, 4, 5 ], [ 6, 7, 8 ],
-      [ 0, 3, 6 ], [ 1, 4, 7 ], [ 2, 5, 8 ],
-      [ 0, 4, 8 ], [ 2, 4, 6 ]
+      [ 0, 1, 2 ], [ 3, 4, 5 ], [ 6, 7, 8 ], [ 0, 3, 6 ], 
+      [ 1, 4, 7 ], [ 2, 5, 8 ], [ 0, 4, 8 ], [ 2, 4, 6 ]
     ];
 
     return {
+      full: () => !grid.includes(null),
+      grid: () => [ ...grid ],
+
       checkLines: ( symbol ) => {
         for (let idx = 0; idx < winningLines.length; idx++) {
           const line = winningLines[idx];
@@ -24,8 +26,6 @@ const gameBoard = (
         }
         return false;
       },
-      full: () => !grid.includes(null),
-      grid: () => grid,
       mark: ( idx, symbol ) => { 
         if (grid[idx] === null) {
           grid[idx] = symbol;
@@ -40,7 +40,7 @@ const gameBoard = (
 
 
 
-const game = ( 
+const tictactoe = ( 
   function () {
     const players = [
       { name: "Player 1", symbol: "X" },
@@ -63,15 +63,17 @@ const game = (
     return {
       currentPlayer,
       isRunning: () => isRunning,
+      turn: () => turn,
+      winner: () => winner,
+
       mark: ( idx ) => {
         if (isRunning) {
           if (gameBoard.mark( idx, currentPlayer().symbol )) {
-            console.log(currentPlayer().symbol)
             if (gameBoard.checkLines( currentPlayer().symbol )) {
               winner = currentPlayer();
               isRunning = false;
             } else if (gameBoard.full()) {
-              winner = null;
+              winner = "tie";
               isRunning = false;
             } else {
               switchPlayer();
@@ -79,9 +81,7 @@ const game = (
             }
           }
         }
-      },
-      turn: () => turn,
-      winner: () => winner
+      }
     }
   }
 )();
