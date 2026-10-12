@@ -1,50 +1,46 @@
 
 
-const gameBoard = ( 
-  function () {
-    const grid = [
-      null, null, null, 
-      null, null, null, 
-      null, null, null
-    ];
-    const winningLines = [
-      [ 0, 1, 2 ], [ 3, 4, 5 ], [ 6, 7, 8 ], [ 0, 3, 6 ], 
-      [ 1, 4, 7 ], [ 2, 5, 8 ], [ 0, 4, 8 ], [ 2, 4, 6 ]
-    ];
+function createPlayer( name, symbol ) {
+  return { name, symbol };
+}
 
-    return {
-      full: () => !grid.includes(null),
-      grid: () => [ ...grid ],
 
-      checkLines: ( symbol ) => {
-        for (let idx = 0; idx < winningLines.length; idx++) {
-          const line = winningLines[idx];
-          if (grid[line[0]] === symbol &&
-              grid[line[1]] === symbol &&
-              grid[line[2]] === symbol
-          ) return true;
-        }
-        return false;
-      },
-      mark: ( idx, symbol ) => { 
-        if (grid[idx] === null) {
-          grid[idx] = symbol;
-          return true;
-        } else {
-          return false;
+
+const tictactoe = ( function () 
+  {
+    const gameboard = ( function () 
+      {
+        const grid = [
+          null, null, null, 
+          null, null, null, 
+          null, null, null
+        ];
+        const winningLines = [
+          [ 0, 1, 2 ], [ 3, 4, 5 ], [ 6, 7, 8 ], [ 0, 3, 6 ], 
+          [ 1, 4, 7 ], [ 2, 5, 8 ], [ 0, 4, 8 ], [ 2, 4, 6 ]
+        ];
+
+        return {
+          checkLines: ( symbol ) => {
+            for (let idx = 0; idx < winningLines.length; idx++) {
+              const line = winningLines[idx];
+              if (grid[line[0]] === symbol &&
+                  grid[line[1]] === symbol &&
+                  grid[line[2]] === symbol
+              ) return true;
+            }
+            return false;
+          },
+          fullBoard: () => !grid.includes(null),
+          rawGrid: () => grid
         }
       }
-    }
-  }
-)();
+    )();
 
 
-
-const tictactoe = ( 
-  function () {
     const players = [
-      { name: "Player 1", symbol: "X" },
-      { name: "Player 2", symbol: "O" }
+      createPlayer( "Player 1", "X" ),
+      createPlayer( "Player 2", "O" )
     ];
 
     let currentPlayerIdx = 0;
@@ -52,36 +48,54 @@ const tictactoe = (
     let turn = 1;
     let winner = null;
 
-    function currentPlayer() {
-      return players[currentPlayerIdx];
-    }
     function switchPlayer() {
       if (currentPlayerIdx === 0) ++currentPlayerIdx;
       else --currentPlayerIdx;
     }
 
+
+    function currentPlayer() {
+      return players[currentPlayerIdx];
+    }
+
+
     return {
       currentPlayer,
-      isRunning: () => isRunning,
-      turn: () => turn,
-      winner: () => winner,
-
       mark: ( idx ) => {
-        if (isRunning) {
-          if (gameBoard.mark( idx, currentPlayer().symbol )) {
-            if (gameBoard.checkLines( currentPlayer().symbol )) {
+        if (isRunning) 
+        {
+          if (gameboard.rawGrid()[idx] === null) {
+            gameboard.rawGrid()[idx] = currentPlayer().symbol;
+
+            if (gameboard.checkLines( currentPlayer().symbol )) {
               winner = currentPlayer();
               isRunning = false;
-            } else if (gameBoard.full()) {
+            } 
+            else if (gameboard.fullBoard()) {
               winner = "tie";
               isRunning = false;
-            } else {
+            } 
+            else {
               switchPlayer();
               ++turn;
             }
           }
         }
-      }
+      },
+      grid: () => [...gameboard.rawGrid()],
+      isRunning: () => isRunning,
+      turn: () => turn,
+      winner: () => winner
     }
   }
 )();
+
+
+for (let i = 0; i < 9; i++) {
+  console.log(tictactoe.currentPlayer())
+  console.log(tictactoe.turn())
+  tictactoe.mark(i)
+  console.log(tictactoe.grid())
+  console.log(tictactoe.winner())
+  console.log("\n\n");
+}
