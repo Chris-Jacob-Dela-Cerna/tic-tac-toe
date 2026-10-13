@@ -89,13 +89,3 @@ const tictactoe = ( function ()
     }
   }
 )();
-
-
-for (let i = 0; i < 9; i++) {
-  console.log(tictactoe.currentPlayer())
-  console.log(tictactoe.turn())
-  tictactoe.mark(i)
-  console.log(tictactoe.grid())
-  console.log(tictactoe.winner())
-  console.log("\n\n");
-}
