@@ -12,7 +12,27 @@
 
 body {
   background-color: rgb(45, 35, 35);
+
+  min-height: 100vh;
+  padding: 10px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
 
+.tictactoe__panel {
+  width: clamp(340px, 50%, 640px);
+  padding: 1.6rem;
+  padding-bottom: 8rem;
+}
+
+
+
+/*  Temporary  */
+
+.tictactoe__panel {
+  border: 1px dashed #ffffff;
+}
