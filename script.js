@@ -1,7 +1,13 @@
 
 
+//  ---  DOM References  ---
+
+const pageGameboard = document.querySelector(".gameboard");
+
+
+
 function createPlayer( symbol ) {
-  return { symbol };
+  return { symbol, score: 0 };
 }
 
 
@@ -20,19 +26,22 @@ const tictactoe = ( function ()
           [ 1, 4, 7 ], [ 2, 5, 8 ], [ 0, 4, 8 ], [ 2, 4, 6 ]
         ];
 
+        let activeGrid = [...grid];
+
         return {
           checkLines: ( symbol ) => {
             for (let idx = 0; idx < winningLines.length; idx++) {
               const line = winningLines[idx];
-              if (grid[line[0]] === symbol &&
-                  grid[line[1]] === symbol &&
-                  grid[line[2]] === symbol
+              if (activeGrid[line[0]] === symbol &&
+                  activeGrid[line[1]] === symbol &&
+                  activeGrid[line[2]] === symbol
               ) return true;
             }
             return false;
           },
-          fullBoard: () => !grid.includes(null),
-          rawGrid: () => grid
+          clearActiveGrid: () => activeGrid = [...grid],
+          fullBoard: () => !activeGrid.includes(null),
+          rawActiveGrid: () => activeGrid
         }
       }
     )();
@@ -64,8 +73,8 @@ const tictactoe = ( function ()
       mark: ( idx ) => {
         if (isRunning) 
         {
-          if (gameboard.rawGrid()[idx] === null) {
-            gameboard.rawGrid()[idx] = currentPlayer().symbol;
+          if (gameboard.rawActiveGrid()[idx] === null) {
+            gameboard.rawActiveGrid()[idx] = currentPlayer().symbol;
 
             if (gameboard.checkLines( currentPlayer().symbol )) {
               winner = currentPlayer();
@@ -82,10 +91,41 @@ const tictactoe = ( function ()
           }
         }
       },
-      grid: () => [...gameboard.rawGrid()],
+      activeGrid: () => [...gameboard.rawActiveGrid()],
       isRunning: () => isRunning,
+      resetActiveGrid: () => gameboard.clearActiveGrid(),
       turn: () => turn,
       winner: () => winner
     }
   }
 )();
+
+
+
+function updateGameboard() {
+  pageGameboard.replaceChildren();
+
+  tictactoe.activeGrid().forEach(squareValue => {
+    const gridSquare = document.createElement("div");
+    let gridSymbol;
+
+    switch (squareValue) {
+      case ("X"):
+        gridSymbol = document.createElement("img");
+        gridSymbol.setAttribute("src", "icons/x-teal.svg");
+        gridSymbol.setAttribute("alt", "X Symbol");
+        gridSquare.appendChild(gridSymbol);
+        break;
+      case ("O"):
+        gridSymbol = document.createElement("img");
+        gridSymbol.setAttribute("src", "icons/circle-yellow-orange.svg");
+        gridSymbol.setAttribute("alt", "Circle Symbol");
+        gridSquare.appendChild(gridSymbol);
+        break;
+    }
+
+    pageGameboard.appendChild(gridSquare);
+  });
+}
+
+updateGameboard();
