@@ -21,6 +21,7 @@
 :root {
   --clr-200-blue-500: rgb(25, 40, 50);
   --clr-200-orange-500: rgb(50, 40, 25);
+  --clr-550-blue-300: rgb(110, 135, 150);
   --clr-750-teal-750: rgb(50, 195, 190);
   --clr-800-blue-200: rgb(170, 190, 200);
   --clr-950-orange-800: rgb(240, 180, 55);
@@ -37,6 +38,11 @@
   margin: 0;
   padding: 0;
   text-decoration: none;
+}
+
+p, img {
+  pointer-events: none;
+  user-select: none;
 }
 
 
@@ -79,10 +85,27 @@ body {
 .tictactoe__restart-btn {
   background-color: var(--clr-800-blue-200);
   border: 0;
+  border-bottom: 6px solid var(--clr-550-blue-300);
   border-radius: 10px;
 
   aspect-ratio: 1 / 1;
   width: max(13%, 50px);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:active { 
+    border-bottom-width: 3px;
+    border-radius: 12px;
+    border-top: 3px solid var(--clr-200-blue-500);
+  }
+}
+
+.tictactoe__restart-icon {
+  height: 65%;
+  width: 65%;
+  transform: scaleX(-1);
 }
 
 
@@ -128,10 +151,6 @@ body {
 
 /*  Temporary  */
 
-.tictactoe__panel,
-/* .tictactoe__header, */
-.tictactoe__symbols,
-.tictactoe__symbol
-/* .tictactoe__scoreboard */ {
+/* .tictactoe__panel {
   border: 1px dashed rgb(103, 133, 155);
-}
+} */
