@@ -1,7 +1,7 @@
 
 
-function createPlayer( name, symbol ) {
-  return { name, symbol };
+function createPlayer( symbol ) {
+  return { symbol };
 }
 
 
@@ -39,8 +39,8 @@ const tictactoe = ( function ()
 
 
     const players = [
-      createPlayer( "Player 1", "X" ),
-      createPlayer( "Player 2", "O" )
+      createPlayer( "X" ),
+      createPlayer( "O" )
     ];
 
     let currentPlayerIdx = 0;
