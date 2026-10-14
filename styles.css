@@ -20,7 +20,9 @@
 
 :root {
   --clr-200-blue-500: rgb(25, 40, 50);
+  --clr-200-blue-600: rgb(15, 35, 40);
   --clr-200-orange-500: rgb(50, 40, 25);
+  --clr-250-blue-550: rgb(30, 55, 65);
   --clr-550-blue-300: rgb(110, 135, 150);
   --clr-750-teal-750: rgb(50, 195, 190);
   --clr-800-blue-200: rgb(170, 190, 200);
@@ -61,8 +63,6 @@ body {
   padding: clamp(1rem, 4%, 2rem);
 }
 
-
-
 .tictactoe__header {
   margin-bottom: 13%;
 
@@ -70,6 +70,23 @@ body {
   align-items: center;
   justify-content: space-between;
 }
+
+.tictactoe__panel > .gameboard {
+  margin-bottom: clamp(4rem, 20%, 8rem);
+
+  display: grid;
+  gap: 5%;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.tictactoe__scoreboard {
+  display: flex;
+  column-gap: 5%
+}
+
+
+
+/*  Header  */
 
 .tictactoe__symbols {
   width: max(40%, 160px);
@@ -89,7 +106,7 @@ body {
   border-radius: 10px;
 
   aspect-ratio: 1 / 1;
-  width: max(13%, 50px);
+  width: max(13%, 55px);
 
   display: flex;
   align-items: center;
@@ -110,10 +127,25 @@ body {
 
 
 
-.tictactoe__scoreboard {
-  display: flex;
-  column-gap: 5%
+/*  Gameboard  */
+
+.gameboard div {
+  background-color: var(--clr-250-blue-550);
+  border-bottom: 8px solid var(--clr-200-blue-600);
+  border-radius: 18px;
+
+  aspect-ratio: 1 / 1;
+
+  &:active { 
+    border-bottom-width: 4px;
+    border-radius: 20px;
+    border-top: 4px solid var(--clr-200-blue-500);
+  }
 }
+
+
+
+/*  Scoreboard  */
 
 .tictactoe__score {
   border-radius: 20px;
@@ -146,11 +178,3 @@ body {
 .bg-teal { background-color: var(--clr-750-teal-750); }
 .bg-grey { background-color: var(--clr-800-blue-200); }
 .bg-yellow-orange { background-color: var(--clr-950-orange-800); }
-
-
-
-/*  Temporary  */
-
-/* .tictactoe__panel {
-  border: 1px dashed rgb(103, 133, 155);
-} */
