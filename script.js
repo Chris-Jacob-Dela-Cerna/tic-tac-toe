@@ -30,13 +30,12 @@ const tictactoe = ( function ()
 
         return {
           checkLines: ( symbol ) => {
-            for (let idx = 0; idx < winningLines.length; idx++) {
-              const line = winningLines[idx];
-              if (activeGrid[line[0]] === symbol &&
-                  activeGrid[line[1]] === symbol &&
-                  activeGrid[line[2]] === symbol
+            winningLines.forEach(winningLine => {
+              if (activeGrid[winningLine] === symbol &&
+                  activeGrid[winningLine] === symbol &&
+                  activeGrid[winningLine] === symbol
               ) return true;
-            }
+            });
             return false;
           },
           clearActiveGrid: () => activeGrid = [...grid],
