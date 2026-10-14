@@ -1,3 +1,21 @@
+@font-face {
+    font-family: 'Outfit';
+    src: url('fonts/Outfit-Bold.woff2') format('woff2'),
+         url('fonts/Outfit-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Outfit';
+    src: url('fonts/Outfit-Medium.woff2') format('woff2'),
+         url('fonts/Outfit-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
 
 
 :root {
@@ -6,12 +24,15 @@
   --clr-750-teal-750: rgb(50, 195, 190);
   --clr-800-blue-200: rgb(170, 190, 200);
   --clr-950-orange-800: rgb(240, 180, 55);
+
+  --font-main: "Outfit";
 }
 
 
 
 * {
   box-sizing: border-box;
+  font-family: var(--font-main);
   list-style: none;
   margin: 0;
   padding: 0;
@@ -83,15 +104,15 @@ body {
   align-items: center;
   flex-direction: column;
   justify-content: center;
-  row-gap: 0.1rem;
 }
 
 .tictactoe__score-label {
-  font-size: max(17cqw, 1rem);
+  font-size: max(16cqw, 1rem);
+  font-weight: 500;
 }
 
 .tictactoe__score-points {
-  font-size: max(30cqw, 1.8rem);
+  font-size: max(28cqw, 1.8rem);
   font-weight: bold;
 }
 
