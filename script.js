@@ -3,6 +3,7 @@
 //  ---  DOM References  ---
 
 const pageGameboard = document.querySelector(".gameboard");
+const pageRestartBtn = document.querySelector(".tictactoe__restart-btn");
 
 
 
@@ -46,7 +47,6 @@ const tictactoe = ( function ()
 
     let currentPlayerIdx = 0;
     let isRunning = true;
-    let turn = 1;
     let winner = null;
 
 
@@ -59,7 +59,7 @@ const tictactoe = ( function ()
       {
         if (gameboard.rawActiveGrid()[idx] === null) {
           gameboard.rawActiveGrid()[idx] = currentPlayer().symbol;
-          updateGameboard();
+          updateGrid();
 
           if (gameboard.checkLines( currentPlayer().symbol )) {
             winner = currentPlayer();
@@ -71,10 +71,17 @@ const tictactoe = ( function ()
           } 
           else {
             switchPlayer();
-            ++turn;
           }
         }
       }
+    }
+
+    function resetGameboard() {
+      currentPlayerIdx = 0;
+      isRunning = true;
+      winner = null;
+      gameboard.resetActiveGrid();
+      updateGrid();
     }
 
     function switchPlayer() {
@@ -82,16 +89,14 @@ const tictactoe = ( function ()
       else --currentPlayerIdx;
     }
 
-    function updateGameboard() {
+    function updateGrid() {
       pageGameboard.replaceChildren();
 
       gameboard.activeGridCopy().forEach((squareValue, squareIdx) => {
         const gridSquare = document.createElement("div");
 
         gridSquare.classList.add("gameboard__square");
-        gridSquare.addEventListener("click", () => {
-          mark(squareIdx);
-        });
+        gridSquare.addEventListener("click", () => mark(squareIdx));
 
         switch (squareValue) {
           case ("X"):
@@ -114,10 +119,17 @@ const tictactoe = ( function ()
       });
     }
 
-    return { updateGameboard };
+    return {
+      resetGameboard,
+      updateGrid
+    };
   }
 )();
 
 
 
-tictactoe.updateGameboard();
+pageRestartBtn.addEventListener("click", () => tictactoe.resetGameboard());
+
+
+
+tictactoe.updateGrid();
