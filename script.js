@@ -6,12 +6,6 @@ const pageGameboard = document.querySelector(".gameboard");
 
 
 
-function createPlayer( symbol ) {
-  return { symbol, score: 0 };
-}
-
-
-
 const tictactoe = ( function () 
   {
     const gameboard = ( function () 
@@ -46,8 +40,8 @@ const tictactoe = ( function ()
 
 
     const players = [
-      createPlayer( "X" ),
-      createPlayer( "O" )
+      { symbol: "X", score: 0 },
+      { symbol: "O", score: 0 }
     ];
 
     let currentPlayerIdx = 0;
@@ -94,6 +88,7 @@ const tictactoe = ( function ()
       gameboard.activeGridCopy().forEach((squareValue, squareIdx) => {
         const gridSquare = document.createElement("div");
 
+        gridSquare.classList.add("gameboard__square");
         gridSquare.addEventListener("click", () => {
           mark(squareIdx);
         });
@@ -101,12 +96,14 @@ const tictactoe = ( function ()
         switch (squareValue) {
           case ("X"):
             gridSymbol = document.createElement("img");
+            gridSymbol.classList.add("gameboard__x-symbol");
             gridSymbol.setAttribute("src", "icons/x-teal.svg");
             gridSymbol.setAttribute("alt", "X Symbol");
             gridSquare.appendChild(gridSymbol);
             break;
           case ("O"):
             gridSymbol = document.createElement("img");
+            gridSymbol.classList.add("gameboard__o-symbol");
             gridSymbol.setAttribute("src", "icons/circle-yellow-orange.svg");
             gridSymbol.setAttribute("alt", "O Symbol");
             gridSquare.appendChild(gridSymbol);
