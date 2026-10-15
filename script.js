@@ -29,6 +29,7 @@ const tictactoe = ( function ()
         let activeGrid = [...grid];
 
         return {
+          activeGridCopy: () => [...activeGrid],
           checkLines: ( symbol ) => {
             winningLines.forEach(winningLine => {
               if (activeGrid[winningLine] === symbol &&
@@ -38,7 +39,7 @@ const tictactoe = ( function ()
             });
             return false;
           },
-          clearActiveGrid: () => activeGrid = [...grid],
+          resetActiveGrid: () => activeGrid = [...grid],
           fullBoard: () => !activeGrid.includes(null),
           rawActiveGrid: () => activeGrid
         }
@@ -56,75 +57,72 @@ const tictactoe = ( function ()
     let turn = 1;
     let winner = null;
 
-    function switchPlayer() {
-      if (currentPlayerIdx === 0) ++currentPlayerIdx;
-      else --currentPlayerIdx;
-    }
-
 
     function currentPlayer() {
       return players[currentPlayerIdx];
     }
 
+    function mark( idx ) {
+      if (isRunning) 
+      {
+        if (gameboard.rawActiveGrid()[idx] === null) {
+          gameboard.rawActiveGrid()[idx] = currentPlayer().symbol;
+          updateGameboard();
 
-    return {
-      currentPlayer,
-      mark: ( idx ) => {
-        if (isRunning) 
-        {
-          if (gameboard.rawActiveGrid()[idx] === null) {
-            gameboard.rawActiveGrid()[idx] = currentPlayer().symbol;
-
-            if (gameboard.checkLines( currentPlayer().symbol )) {
-              winner = currentPlayer();
-              isRunning = false;
-            } 
-            else if (gameboard.fullBoard()) {
-              winner = "tie";
-              isRunning = false;
-            } 
-            else {
-              switchPlayer();
-              ++turn;
-            }
+          if (gameboard.checkLines( currentPlayer().symbol )) {
+            winner = currentPlayer();
+            isRunning = false;
+          } 
+          else if (gameboard.fullBoard()) {
+            winner = "tie";
+            isRunning = false;
+          } 
+          else {
+            switchPlayer();
+            ++turn;
           }
         }
-      },
-      activeGrid: () => [...gameboard.rawActiveGrid()],
-      isRunning: () => isRunning,
-      resetActiveGrid: () => gameboard.clearActiveGrid(),
-      turn: () => turn,
-      winner: () => winner
+      }
     }
+
+    function switchPlayer() {
+      if (currentPlayerIdx === 0) ++currentPlayerIdx;
+      else --currentPlayerIdx;
+    }
+
+    function updateGameboard() {
+      pageGameboard.replaceChildren();
+
+      gameboard.activeGridCopy().forEach((squareValue, squareIdx) => {
+        const gridSquare = document.createElement("div");
+
+        gridSquare.addEventListener("click", () => {
+          mark(squareIdx);
+        });
+
+        switch (squareValue) {
+          case ("X"):
+            gridSymbol = document.createElement("img");
+            gridSymbol.setAttribute("src", "icons/x-teal.svg");
+            gridSymbol.setAttribute("alt", "X Symbol");
+            gridSquare.appendChild(gridSymbol);
+            break;
+          case ("O"):
+            gridSymbol = document.createElement("img");
+            gridSymbol.setAttribute("src", "icons/circle-yellow-orange.svg");
+            gridSymbol.setAttribute("alt", "O Symbol");
+            gridSquare.appendChild(gridSymbol);
+            break;
+        }
+
+        pageGameboard.appendChild(gridSquare);
+      });
+    }
+
+    return { updateGameboard };
   }
 )();
 
 
 
-function updateGameboard() {
-  pageGameboard.replaceChildren();
-
-  tictactoe.activeGrid().forEach(squareValue => {
-    const gridSquare = document.createElement("div");
-    let gridSymbol;
-
-    switch (squareValue) {
-      case ("X"):
-        gridSymbol = document.createElement("img");
-        gridSymbol.setAttribute("src", "icons/x-teal.svg");
-        gridSymbol.setAttribute("alt", "X Symbol");
-        gridSquare.appendChild(gridSymbol);
-        break;
-      case ("O"):
-        gridSymbol = document.createElement("img");
-        gridSymbol.setAttribute("src", "icons/circle-yellow-orange.svg");
-        gridSymbol.setAttribute("alt", "Circle Symbol");
-        gridSquare.appendChild(gridSymbol);
-        break;
-    }
-
-    pageGameboard.appendChild(gridSquare);
-  });
-}
-
-updateGameboard();
+tictactoe.updateGameboard();
