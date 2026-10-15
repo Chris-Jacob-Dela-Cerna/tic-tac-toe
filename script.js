@@ -4,6 +4,9 @@
 
 const pageGameboard = document.querySelector(".gameboard");
 const pageRestartBtn = document.querySelector(".tictactoe__restart-btn");
+const pageXScores = document.getElementById("scoreboard__x");
+const pageTieScores = document.getElementById("scoreboard__tie");
+const pageOScores = document.getElementById("scoreboard__o");
 
 
 
@@ -47,7 +50,7 @@ const tictactoe = ( function ()
 
     let currentPlayerIdx = 0;
     let isRunning = true;
-    let winner = null;
+    let ties = 0;
 
 
     function currentPlayer() {
@@ -59,14 +62,16 @@ const tictactoe = ( function ()
       {
         if (gameboard.rawActiveGrid()[idx] === null) {
           gameboard.rawActiveGrid()[idx] = currentPlayer().symbol;
-          updateGrid();
+          updateGameboard();
 
           if (gameboard.checkLines( currentPlayer().symbol )) {
-            winner = currentPlayer();
+            ++currentPlayer().score;
+            updateScoreboard();
             isRunning = false;
           } 
           else if (gameboard.fullBoard()) {
-            winner = "tie";
+            ++ties;
+            updateScoreboard();
             isRunning = false;
           } 
           else {
@@ -79,9 +84,8 @@ const tictactoe = ( function ()
     function resetGameboard() {
       currentPlayerIdx = 0;
       isRunning = true;
-      winner = null;
       gameboard.resetActiveGrid();
-      updateGrid();
+      updateGameboard();
     }
 
     function switchPlayer() {
@@ -89,7 +93,7 @@ const tictactoe = ( function ()
       else --currentPlayerIdx;
     }
 
-    function updateGrid() {
+    function updateGameboard() {
       pageGameboard.replaceChildren();
 
       gameboard.activeGridCopy().forEach((squareValue, squareIdx) => {
@@ -119,9 +123,15 @@ const tictactoe = ( function ()
       });
     }
 
+    function updateScoreboard() {
+      pageXScores.textContent = players[0].score;
+      pageTieScores.textContent = ties;
+      pageOScores.textContent = players[1].score;
+    }
+
     return {
       resetGameboard,
-      updateGrid
+      updateGameboard
     };
   }
 )();
@@ -132,4 +142,4 @@ pageRestartBtn.addEventListener("click", () => tictactoe.resetGameboard());
 
 
 
-tictactoe.updateGrid();
+tictactoe.updateGameboard();
