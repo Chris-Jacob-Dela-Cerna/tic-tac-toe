@@ -30,15 +30,13 @@ const tictactoe = ( function ()
 
         return {
           activeGridCopy: () => [...activeGrid],
-          checkLines: ( symbol ) => {
-            winningLines.forEach(winningLine => {
-              if (activeGrid[winningLine] === symbol &&
-                  activeGrid[winningLine] === symbol &&
-                  activeGrid[winningLine] === symbol
-              ) return true;
-            });
-            return false;
-          },
+          checkLines: ( symbol ) => 
+            winningLines.some(winningLine => {
+              return activeGrid[winningLine[0]] === symbol &&
+                     activeGrid[winningLine[1]] === symbol &&
+                     activeGrid[winningLine[2]] === symbol;
+            }
+          ),
           resetActiveGrid: () => activeGrid = [...grid],
           fullBoard: () => !activeGrid.includes(null),
           rawActiveGrid: () => activeGrid
